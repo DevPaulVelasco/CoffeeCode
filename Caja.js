@@ -14,8 +14,13 @@ function calcularTotal() {
     return listaDePedidos.reduce((total, pedido) => total + pedido.precio, 0);
 }
 
+function calcularTotalIva(){
+    return listaDePedidos.reduce((total,pedido) => total * 1.16 + pedido.precio, 0);
+}
+
 module.exports = {
     agregarPedido,
     listarPedidos,
-    calcularTotal
+    calcularTotal,
+    calcularTotalIva
 };

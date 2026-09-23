@@ -84,7 +84,8 @@ async function iniciar() {
 
       case "6":
         console.log(cliente.listarPedidos());
-        console.log(`Total: $${caja.calcularTotal().toFixed(2)}`);
+        console.log(`Subtotal: $${caja.calcularTotal().toFixed(2)}`);
+        console.log(`Total: $${caja.calcularTotalIva().toFixed(2)}`);
         break;
 
       case "0":
