@@ -1,11 +1,12 @@
 const productos = [];
 
-function agregarProductos(nombre, precio, cantidad) {
+function agregarProductos(nombre, precio, cantidad, categoria = "general") {
   const producto = {
     id: productos.length + 1,
     nombre: nombre,
     precio: precio,
     cantidad: cantidad,
+    categoria: categoria,
     disponible: true
   };
 
@@ -19,6 +20,54 @@ function listarProductos() {
 
 function buscarProductoPorId(id) {
   return productos.find((producto) => producto.id === Number(id));
+}
+
+
+function buscarProductosBaratos(maximoPrecio = 30) {
+  return productos.filter((producto) => producto.precio <= maximoPrecio);
+}
+
+
+function buscarProductosCaros(minimoPrecio = 50) {
+  return productos.filter((producto) => producto.precio >= minimoPrecio);
+}
+
+function buscarProductosPorCategoria(categoria) {
+  if (!categoria) {
+    return [];
+  }
+
+  const categoriaBuscada = categoria.toLowerCase();
+
+  return productos.filter(
+    (producto) => (producto.categoria || "general").toLowerCase() === categoriaBuscada
+  );
+}
+
+function buscarBebidas() {
+  return buscarProductosPorCategoria("bebida");
+}
+
+function buscarPostres() {
+  return buscarProductosPorCategoria("postre");
+}
+
+
+function calcularValorTotalInventario() {
+  return productos.reduce(
+    (total, producto) => total + producto.precio * producto.cantidad,
+    0
+  );
+}
+
+
+function calcularPromedioPrecio() {
+  if (productos.length === 0) {
+    return 0;
+  }
+
+  const sumaPrecios = productos.reduce((total, producto) => total + producto.precio, 0);
+  return sumaPrecios / productos.length;
 }
 
 function editarProductos(id, nombre, precio, cantidad) {
@@ -53,8 +102,14 @@ module.exports = {
   agregarProductos,
   listarProductos,
   buscarProductoPorId,
+  buscarProductosBaratos,
+  buscarProductosCaros,
+  buscarProductosPorCategoria,
+  buscarBebidas,
+  buscarPostres,
+  calcularValorTotalInventario,
+  calcularPromedioPrecio,
   editarProductos,
   eliminarProductos
 };
 
-//UNA DISCULPA PROFE ESTUVIMOS RESOLVIENDO EL PROBLEMA DEL CLIENTE Y NO NOS DIO TIEMPO DE AVANZAR
