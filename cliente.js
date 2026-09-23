@@ -1,4 +1,4 @@
-
+ 
 const menu = [
   { id: 1, nombre: "Café", precio: 15 },
   { id: 2, nombre: "Jugo", precio: 30 },
