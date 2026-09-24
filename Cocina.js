@@ -22,6 +22,13 @@ function buscarProductoPorId(id) {
   return productos.find((producto) => producto.id === Number(id));
 }
 
+function find(callback) {
+  return productos.find(callback);
+}
+
+function filter(callback) {
+  return productos.filter(callback);
+}
 
 function buscarProductosBaratos(maximoPrecio = 30) {
   return productos.filter((producto) => producto.precio <= maximoPrecio);
@@ -102,6 +109,8 @@ module.exports = {
   agregarProductos,
   listarProductos,
   buscarProductoPorId,
+  find,
+  filter,
   buscarProductosBaratos,
   buscarProductosCaros,
   buscarProductosPorCategoria,

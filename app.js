@@ -1,6 +1,6 @@
 const readline = require("readline");
 const cocina = require("./Cocina");
-const cliente = require("./Cliente");
+const cliente = require("./cliente");
 const caja = require("./Caja");
 
 const terminal = readline.createInterface({
@@ -14,7 +14,7 @@ cocina.agregarProductos("Pan", 20, 12);
 
 function preguntar(texto) {
   return new Promise((resolver) => terminal.question(texto, resolver));
-}
+}  
 
 function mostrarMenuPrincipal() {
   console.log(`
@@ -24,6 +24,8 @@ function mostrarMenuPrincipal() {
 4. Eliminar producto
 5. Crear pedido
 6. Ver pedidos y total
+7. Buscar producto
+8. Filtrar productos
 0. Salir
 `);
 }
@@ -87,6 +89,34 @@ async function iniciar() {
         console.log(`Subtotal: $${caja.calcularTotal().toFixed(2)}`);
         console.log(`Total: $${caja.calcularTotalIva().toFixed(2)}`);
         break;
+
+      case "7": {
+        const idProducto = Number(await preguntar("ID del producto: "));
+        const producto = cocina.find((prod) => prod.id === idProducto);
+
+        if (!producto) {
+          console.log("Producto no encontrado.");
+          break;
+        }
+
+        console.log(producto);
+        break;
+      }
+
+      case "8": {
+        const precioMaximo = Number(await preguntar("Precio máximo: "));
+        const productosFiltrados = cocina.filter(
+          (prod) => prod.precio <= precioMaximo
+        );
+
+        if (!productosFiltrados.length) {
+          console.log("No hay productos con ese filtro.");
+          break;
+        }
+
+        console.log(productosFiltrados);
+        break;
+      }
 
       case "0":
         terminal.close();
