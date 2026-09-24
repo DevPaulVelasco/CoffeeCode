@@ -46,5 +46,39 @@ function listarPedidos() {
 module.exports = {
   consultarmenu,
   crearPedido,
-  listarPedidos
+  listarPedidos,
+  mostrarPromociones,
+  mostrarProductosDisponibles
 };
+
+function mostrarPromociones(menu = []) {
+  console.log(`\nPROMOCIONES DEL DÍA (10%) `);
+
+  if (!menu.length) {
+    console.log("No hay productos disponibles.");
+    return;
+  }
+
+  const promociones = menu.map(prod => {
+    return {
+      nombre: prod.nombre,
+      precioOferta: prod.precio * 0.90
+    };
+  });
+
+  promociones.forEach(promo => {
+    console.log(`• ${promo.nombre}: Oferta a $${promo.precioOferta.toFixed(2)}`);
+  });
+}
+
+function mostrarProductosDisponibles(menu = []) {
+  console.log(`\n PRODUCTOS DISPONIBLES`);
+
+  if (!menu.length) {
+    console.log("No hay productos disponibles.");
+    return;
+  }
+
+  const listaNombres = menu.map(prod => prod.nombre);
+  console.log(`Disponibles: ${listaNombres.join(", ")}`);
+}
