@@ -31,7 +31,7 @@ function filter(callback) {
 }
 
 function buscarProductosBaratos(maximoPrecio = 30) {
-  return productos.filter((producto) => producto.precio <= maximoPrecio);
+  return productos.filter((producto) => producto.precio < maximoPrecio);
 }
 
 
@@ -104,6 +104,25 @@ function eliminarProductos(id) {
 
   return productos.splice(posicion, 1)[0];
 }
+
+function cargarProductosDemo() {
+  const listaDemo = [
+    { nombre: "Café Espresso", precio: 45, cantidad: 12, categoria: "bebida" },
+    { nombre: "Latte", precio: 60, cantidad: 9, categoria: "bebida" },
+    { nombre: "Capuchino", precio: 55, cantidad: 8, categoria: "bebida" },
+    { nombre: "Brownie", precio: 50, cantidad: 7, categoria: "postre" },
+    { nombre: "Croissant", precio: 30, cantidad: 10, categoria: "postre" },
+    { nombre: "Jugo Natural", precio: 40, cantidad: 6, categoria: "bebida" },
+    { nombre: "Té Verde", precio: 25, cantidad: 15, categoria: "bebida" },
+    { nombre: "Muffin", precio: 35, cantidad: 11, categoria: "postre" }
+  ];
+
+  listaDemo.forEach(({ nombre, precio, cantidad, categoria }) => {
+    agregarProductos(nombre, precio, cantidad, categoria);
+  });
+}
+
+cargarProductosDemo();
 
 module.exports = {
   agregarProductos,
