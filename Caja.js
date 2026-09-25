@@ -1,23 +1,10 @@
 const listaDePedidos = [];
 
-function agregarPedido(nombre, precio, callback = () => {}) {
-    setTimeout(() => {
-        if (!nombre || typeof precio !== 'number' || precio <= 0) {
-            if (typeof callback === 'function') {
-                return callback("Pedido cancelado: Datos inválidos.", null);
-            }
-            return;
-        }
-
-        const pedido = { producto: nombre, precio: precio };
-        listaDePedidos.push(pedido);
-
-        if (typeof callback === 'function') {
-            callback(null, { mensaje: "Pedido listo", pedido });
-        }
-    }, 5000);
+function agregarPedido(nombre, precio) {
+    const pedido = { producto: nombre, precio: precio };
+    listaDePedidos.push(pedido);
+    return pedido;
 }
-
 
 function listarPedidos() {
     return listaDePedidos;

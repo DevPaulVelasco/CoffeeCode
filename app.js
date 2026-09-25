@@ -68,76 +68,6 @@ async function iniciar() {
       case "5": {
         const nombreCliente = await preguntar("Nombre del cliente: ");
         const idProducto = Number(await preguntar("ID del producto: "));
-
-        console.log("Buscando producto en el sistema...");
-
-        // Simula la búsqueda en el sistema durante 2 segundos
-        const pedido = await new Promise((resolver) => {
-          setTimeout(() => {
-            const resultado = cliente.crearPedido(
-              nombreCliente,
-              idProducto,
-              cocina.listarProductos()
-            );
-            resolver(resultado);
-          }, 2000); // 2 segundos de búsqueda
-        }); 
-
-        // Si no existe, muestra el mensaje tras los 2 segundos de espera
-        if (!pedido) {
-          console.log("Pedido cancelado: Producto no encontrado.");
-          break;
-        }
-
-        console.log("Producto encontrado. Procesando pedido (5 segundos)...");
-
-        // Si existe, procede a guardarlo en la caja con su callback de 5 segundos
-        await new Promise((resolver) => {
-          caja.agregarPedido(pedido.producto, pedido.precio, (error, respuesta) => {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log(`${respuesta.mensaje}: ${respuesta.pedido.producto} para ${nombreCliente}`);
-            }
-            resolver();
-          });
-        });
-
-        break;
-      }
-     /*  case "5": {
-        const nombreCliente = await preguntar("Nombre del cliente: ");
-        const idProducto = Number(await preguntar("ID del producto: "));
-        const pedido = cliente.crearPedido(
-          nombreCliente,
-          idProducto,
-          cocina.listarProductos()
-        );
-
-        if (!pedido) {
-          console.log("Producto no encontrado.");
-          break;
-        }
-
-        console.log("Procesando pedido, por favor espera 5 segundos...");
-
-        // Esperamos a que la función con callback complete los 5 segundos
-        await new Promise((resolver) => {
-          caja.agregarPedido(pedido.producto, pedido.precio, (error, respuesta) => {
-            if (error) {
-              console.log(error);
-            } else {
-              console.log(`${respuesta.mensaje}: ${respuesta.pedido.producto} para ${nombreCliente}`);
-            }
-            resolver(); // Continuar el menú después de los 5 segundos
-          });
-        });
-
-        break;
-      } */
-      /* case "5": {
-        const nombreCliente = await preguntar("Nombre del cliente: ");
-        const idProducto = Number(await preguntar("ID del producto: "));
         const pedido = cliente.crearPedido(
           nombreCliente,
           idProducto,
@@ -152,7 +82,7 @@ async function iniciar() {
         caja.agregarPedido(pedido.producto, pedido.precio);
         console.log("Pedido creado correctamente.");
         break;
-      } */
+      }
 
       case "6":
         console.log(cliente.listarPedidos());
