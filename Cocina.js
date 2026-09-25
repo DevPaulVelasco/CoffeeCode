@@ -21,8 +21,30 @@ function buscarProductoPorId(id) {
   return productos.find((producto) => producto.id === Number(id));
 }
 
+<<<<<<< HEAD
 function filtrarProductos(condicion) {
   if (typeof condicion !== "function") {
+=======
+function find(callback) {
+  return productos.find(callback);
+}
+
+function filter(callback) {
+  return productos.filter(callback);
+}
+
+function buscarProductosBaratos(maximoPrecio = 30) {
+  return productos.filter((producto) => producto.precio < maximoPrecio);
+}
+
+
+function buscarProductosCaros(minimoPrecio = 50) {
+  return productos.filter((producto) => producto.precio >= minimoPrecio);
+}
+
+function buscarProductosPorCategoria(categoria) {
+  if (!categoria) {
+>>>>>>> a72445286575f22063db367e1b97459b4662d308
     return [];
   }
 
@@ -67,6 +89,7 @@ function eliminarProductos(id) {
   return productos.splice(posicion, 1)[0];
 }
 
+<<<<<<< HEAD
 function prepararCafe() {
   return new Promise((resolver, rechazar) => {
     setTimeout(() => {
@@ -86,6 +109,27 @@ function prepararCafe() {
     }, 1000);
   });
 }
+=======
+function cargarProductosDemo() {
+  const listaDemo = [
+    { nombre: "Café Espresso", precio: 45, cantidad: 12, categoria: "bebida" },
+    { nombre: "Latte", precio: 60, cantidad: 9, categoria: "bebida" },
+    { nombre: "Capuchino", precio: 55, cantidad: 8, categoria: "bebida" },
+    { nombre: "Brownie", precio: 50, cantidad: 7, categoria: "postre" },
+    { nombre: "Croissant", precio: 30, cantidad: 10, categoria: "postre" },
+    { nombre: "Jugo Natural", precio: 40, cantidad: 6, categoria: "bebida" },
+    { nombre: "Té Verde", precio: 25, cantidad: 15, categoria: "bebida" },
+    { nombre: "Muffin", precio: 35, cantidad: 11, categoria: "postre" }
+  ];
+
+  listaDemo.forEach(({ nombre, precio, cantidad, categoria }) => {
+    agregarProductos(nombre, precio, cantidad, categoria);
+  });
+}
+
+cargarProductosDemo();
+
+>>>>>>> a72445286575f22063db367e1b97459b4662d308
 module.exports = {
   agregarProductos,
   listarProductos,
