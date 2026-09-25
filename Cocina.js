@@ -1,12 +1,11 @@
-const productos = [];
+ const productos = [];
 
-function agregarProductos(nombre, precio, cantidad, categoria = "general") {
+function agregarProductos(nombre, precio, cantidad) {
   const producto = {
     id: productos.length + 1,
     nombre: nombre,
     precio: precio,
     cantidad: cantidad,
-    categoria: categoria,
     disponible: true
   };
 
@@ -22,59 +21,22 @@ function buscarProductoPorId(id) {
   return productos.find((producto) => producto.id === Number(id));
 }
 
-function find(callback) {
-  return productos.find(callback);
-}
-
-function filter(callback) {
-  return productos.filter(callback);
-}
-
-function buscarProductosBaratos(maximoPrecio = 30) {
-  return productos.filter((producto) => producto.precio <= maximoPrecio);
-}
-
-
-function buscarProductosCaros(minimoPrecio = 50) {
-  return productos.filter((producto) => producto.precio >= minimoPrecio);
-}
-
-function buscarProductosPorCategoria(categoria) {
-  if (!categoria) {
+function filtrarProductos(condicion) {
+  if (typeof condicion !== "function") {
     return [];
   }
 
-  const categoriaBuscada = categoria.toLowerCase();
-
-  return productos.filter(
-    (producto) => (producto.categoria || "general").toLowerCase() === categoriaBuscada
-  );
+  return productos.filter(condicion);
 }
 
-function buscarBebidas() {
-  return buscarProductosPorCategoria("bebida");
-}
+function filtrarProductosPorPrecio(precioMaximo) {
+  const maximo = Number(precioMaximo);
 
-function buscarPostres() {
-  return buscarProductosPorCategoria("postre");
-}
-
-
-function calcularValorTotalInventario() {
-  return productos.reduce(
-    (total, producto) => total + producto.precio * producto.cantidad,
-    0
-  );
-}
-
-
-function calcularPromedioPrecio() {
-  if (productos.length === 0) {
-    return 0;
+  if (Number.isNaN(maximo)) {
+    return [];
   }
 
-  const sumaPrecios = productos.reduce((total, producto) => total + producto.precio, 0);
-  return sumaPrecios / productos.length;
+  return productos.filter((producto) => producto.precio <= maximo);
 }
 
 function editarProductos(id, nombre, precio, cantidad) {
@@ -105,20 +67,33 @@ function eliminarProductos(id) {
   return productos.splice(posicion, 1)[0];
 }
 
+function prepararCafe() {
+  return new Promise((resolver, rechazar) => {
+    setTimeout(() => {
+      const resultado = Math.random();
+
+      if (resultado < 0.2) {
+        rechazar(new Error("Falta un ingrediente para preparar el café."));
+        return;
+      }
+
+      if (resultado < 0.4) {
+        rechazar(new Error("Ocurrió un error en la cocina."));
+        return;
+      }
+
+      resolver("Café preparado correctamente.");
+    }, 1000);
+  });
+}
 module.exports = {
   agregarProductos,
   listarProductos,
   buscarProductoPorId,
-  find,
-  filter,
-  buscarProductosBaratos,
-  buscarProductosCaros,
-  buscarProductosPorCategoria,
-  buscarBebidas,
-  buscarPostres,
-  calcularValorTotalInventario,
-  calcularPromedioPrecio,
+  filtrarProductos,
+  filtrarProductosPorPrecio,
   editarProductos,
-  eliminarProductos
+  eliminarProductos,
+  prepararCafe
 };
-
+ 
