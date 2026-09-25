@@ -1,9 +1,9 @@
 const readline = require("readline");
 const cocina = require("./Cocina");
-const cliente = require("./cliente");
+const cliente = require("./Cliente");
 const caja = require("./Caja");
 
-const terminal = readline.createInterface({
+const terminal = readline.createInterface({ 
   input: process.stdin,
   output: process.stdout
 });
@@ -26,6 +26,7 @@ function mostrarMenuPrincipal() {
 6. Ver pedidos y total
 7. Buscar producto
 8. Filtrar productos
+9. Ver promociones
 0. Salir
 `);
 }
@@ -68,31 +69,55 @@ async function iniciar() {
       case "5": {
         const nombreCliente = await preguntar("Nombre del cliente: ");
         const idProducto = Number(await preguntar("ID del producto: "));
-        const pedido = cliente.crearPedido(
-          nombreCliente,
-          idProducto,
-          cocina.listarProductos()
-        );
 
+        console.log("Buscando producto en el sistema...");
+
+        // Simula la búsqueda en el sistema durante 2 segundos
+        const pedido = await new Promise((resolver) => {
+          setTimeout(() => {
+            const resultado = cliente.crearPedido(
+              nombreCliente,
+              idProducto,
+              cocina.listarProductos()
+            );
+            resolver(resultado);
+          }, 2000); // 2 segundos de búsqueda
+        }); 
+
+        // Si no existe, muestra el mensaje tras los 2 segundos de espera
         if (!pedido) {
-          console.log("Producto no encontrado.");
+          console.log("Pedido cancelado: Producto no encontrado.");
           break;
         }
 
-        caja.agregarPedido(pedido.producto, pedido.precio);
-        console.log("Pedido creado correctamente.");
+        console.log("Producto encontrado. Procesando pedido...");
+
+        await new Promise((resolver) => {
+          caja.agregarPedido(pedido.producto, pedido.precio, (error, respuesta) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log(`${respuesta.mensaje}: ${respuesta.pedido.producto} para ${nombreCliente}`);
+            }
+            resolver();
+          });
+        });
+
+        await new Promise((resolver) => setTimeout(resolver, 10000));
+
         break;
       }
+     
 
       case "6":
         console.log(cliente.listarPedidos());
         console.log(`Subtotal: $${caja.calcularTotal().toFixed(2)}`);
-        console.log(`Total: $${caja.calcularTotalIva().toFixed(2)}`);
+        console.log(`Total con IVA: $${caja.calcularTotalIva().toFixed(2)}`);
         break;
 
       case "7": {
         const idProducto = Number(await preguntar("ID del producto: "));
-        const producto = cocina.find((prod) => prod.id === idProducto);
+        const producto = cocina.buscarProductoPorId(idProducto);
 
         if (!producto) {
           console.log("Producto no encontrado.");
@@ -105,18 +130,20 @@ async function iniciar() {
 
       case "8": {
         const precioMaximo = Number(await preguntar("Precio máximo: "));
-        const productosFiltrados = cocina.filter(
-          (prod) => prod.precio <= precioMaximo
-        );
+        const productosFiltrados = cocina.filtrarProductosPorPrecio(precioMaximo);
 
         if (!productosFiltrados.length) {
           console.log("No hay productos con ese filtro.");
           break;
         }
 
-        console.log(productosFiltrados);
+        cliente.consultarmenu(productosFiltrados);
         break;
       }
+
+      case "9":
+        cliente.mostrarPromociones(cocina.listarProductos());
+        break;
 
       case "0":
         terminal.close();
@@ -128,4 +155,4 @@ async function iniciar() {
   } while (opcion !== "0");
 }
 
-iniciar();
+iniciar();   
